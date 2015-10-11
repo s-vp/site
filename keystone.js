@@ -36,7 +36,7 @@ keystone.init({
 	'session store': 'mongo',
 	'auth': true,
 	'user model': 'User',
-	'cookie secret': process.env.COOKIE_SECRET || 'svpconsulting',
+	'cookie secret': process.env.COOKIE_SECRET || 'testdevcookies',
 	'default region': 'us',
 
 	'mandrill api key': process.env.MANDRILL_KEY,
