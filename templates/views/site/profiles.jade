@@ -1,0 +1,53 @@
+extends ../../layouts/default
+
+include ../../mixins/profile
+
+block intro
+	.page-intro: .container
+		h1 Profiles
+		if data.tag
+			p.lead under <strong>#{data.tag.name}</strong>
+		else
+			//-p.lead Pride and Joy 
+		.buttons
+			if !user
+				a(href='/join').btn.btn-primary Join SVP
+				a(href='/signin').btn.btn-default Sign In
+			//-else
+				a(href='/me').btn.btn-primary Add yours
+
+block content
+	.page-content: .container
+		.row
+			.col-sm-9
+				if filters.tag && !data.tag
+					h3 Invalid tag.
+				else
+					if data.profiles.length
+						.blog
+							each profile in data.profiles
+								+profile(profile)
+					else
+						if data.tag
+							h3.xtext-muted No profiles in the tag #{data.tag.name}.
+						else
+							h3.text-muted There are no profiles yet.			
+			.col-sm-3
+				h5.text-muted Sort by
+				p: small
+					if current.sort == 'updated'
+						strong Recently added
+					else
+						a(href=qs_set({ sort: '-updatedAt' })) Recently Updated
+					span.text-muted &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
+					if current.sort == 'title'
+						strong Name
+					else
+						a(href=qs_set({ sort: 'title' })) Name
+				if data.tags.length
+					hr
+					h5.text-muted Filter by tag
+					ul.list-unstyled.tags-list
+						li: a(href='/profiles', class=!data.tag ? 'active' : false) All
+						each tag in data.tags
+							li: a(href='/profiles/' + tag.key, class=data.tag && data.tag.id == tag.id ? 'active' : false).list-group-item= tag.name

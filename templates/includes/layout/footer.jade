@@ -1,0 +1,43 @@
+//- SITE FOOTER
+footer.site-footer.site-footer--sticky: .container
+	.row
+		.col-sm-4
+			h5.footer-heading SVP Consulting:
+			p Technical expertise for Oracle Products 
+			p Professional Services and Customization
+			p IT infrastructure Consulting and Optimization 
+			ul.list-inline
+				li: a(href='/about') Read more .. 
+		.col-sm-8
+			.row
+				.col-xs-4
+					h5.footer-heading Profiles:
+					ul
+						li: a(href='/profiles') Oracle Database Engineers 
+						li: a(href='/profiles') Applciation Professional Services
+						li: a(href='/profiles') Java and Scala DevOps
+						//-li: a(href='/mentoring') Professional Services and Customization 
+						if !user
+							li: a(href='/join').js-auth-trigger Create Profile ..
+				.col-xs-4
+					h5.footer-heading Links:
+					ul
+						//-li: a(href='/skills') Skills Dictionary 
+						li: a(href='/links') Links
+						li: a(href='/blog') SVP Blog
+						//-li: a(href='/showbag') Apps
+				//-.col-xs-4
+					h5.footer-heading Partners
+					ul: each sponsor in sponsors
+						li: a(href='/organisations#' + sponsor.id)= sponsor.name
+				.col-xs-4
+					h5.footer-heading Partners:
+					ul: each sponsor in sponsors
+						li: a(href='/organisations#' + sponsor.id)= sponsor.name
+					ul 
+						li: a(href='https://www.s-vp.com/otrs/customer.pl') Customer Portal 					
+						li: a(href='mailto:svp@s-vp.com') Get in-touch  
+
+	.row.footer-copyright
+		p :: www.s-vp.com :: Copyright &copy; 2015 SVP Consulting :: www.s-vp.com :: 
+			//-Powered by <a href='http://keystonejs.com', target='_blank'>KeystoneJS</a>.		

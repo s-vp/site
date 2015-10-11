@@ -1,0 +1,241 @@
+extends ../../layouts/default
+
+
+block intro	
+	.container
+		.back-bar
+			.xs-right: a(href='/profiles').text-muted &larr; Back to Profiles
+	.page-intro: .container
+			if !profile
+				h2 Invalid Profile.
+			else
+				header
+					if profile.state != 'published' && user.isAdmin
+						.mt-1: .alert.alert-danger This Profile has not been published yet. 
+							a(href='/keystone/profiles/' + profile.id).alert-link Open Keystone
+							|  to publish it.
+					
+					h1.blog-post__title :: #{profile.title} ::
+					
+block content
+	article.full-post
+		.container
+			.panel: .panel-body
+				if profile.who && profile.isAvailable
+					each member in [profile.who]
+						- var twitterUsername = member.twitterUsername || (member.twitter ? member.twitter.replace('@', ''): '');
+						- var githubUsername = member.githubUsername || (member.github ? member.github.replace('@', '') : '');
+							span.label.label-success Available
+							.member.member--profile
+									.member-section.member__info
+										.row
+											.col-sm-6
+												h2.mb-1= member.name.full
+												p.text-muted.mv-1 Member since #{moment(member.createdOn).format('MMMM YYYY')}												
+												if member.bio.html
+													!= member.bio.html
+												.member__accounts.mb-1
+												if member.email
+														//a(href='mailto:#{member.email}').btn-group.button.btn.btn-default.btn-sm
+															span @ 																
+													a(href='mailto:#{member.email}').member__account.member__account--twitter.btn.btn-default
+															span @ 	
+
+												if twitterUsername || githubUsername
+														if twitterUsername
+															a(href='https://twitter.com/' + twitterUsername, target='_blank', data-toggle='tooltip', data-title='@' + twitterUsername, data-placement='top').member__account.member__account--twitter.btn.btn-default
+																span.entypo-social.entypo-twitter
+																=twitterUsername
+														if githubUsername
+															a(href='https://github.com/' + githubUsername, target='_blank', data-toggle='tooltip', data-title=githubUsername, data-placement='top').member__account.member__account--github.btn.btn-default
+																span.entypo-social.entypo-github
+																=githubUsername
+											
+											if member.photo.exists  
+											.col-sm-2
+												img(src=(member.photo.exists ? member._.photo.thumbnail(600,600) : member.avatarUrl || '/images/avatar.png'), alt=member.name.full).img-responsive.img-circle
+											if profile.logourl
+											.col-sm-2
+												img(style='height:100px', src='#{profile.logourl}' alt=profile.title).img-rounded
+				.list-group
+					.list-group-item(style='width:100%')
+						h3.list-group-item-heading Objective
+						br 						 							
+						p.list-group-item-text!=profile.objective.html
+				ul.list-group(style='width:100%')
+					li.list-group-item 
+							h3 Summary
+					li.list-group-item
+							!=profile.summary.html																											
+				if profile.experience
+					ul.list-group
+						li.list-group-item
+							h3 Ranking 								 							
+						li.list-group-item
+							.progress
+								.progress-bar.progress-bar-success(style='width:30%')
+						li.list-group-item
+							.progress
+								.progress-bar.progress-bar-success(style='width:30%')
+				br
+				if profile.skills.length && profile.skillset.length && profile.tags.length			
+				each tag in profile.tags
+					if profile.template == 'default'
+						.panel.panel-default
+							- var skillcount=0
+							each skillset in profile.skillset
+								if tag.id == skillset.tag
+									each skill in profile.skills
+										if (skill.skillset == skillset.id)
+											-skillcount=skillcount+1
+							if skillcount == 0  
+								//-.alert.alert-danger Add some perks and abilities into #{tag.tag} ..
+							else 
+								.panel-heading
+									.panel-title
+										.row
+											.col-md-11
+												h4= tag.tag 	
+											.col-md-1
+												h4.span.badge=skillcount
+								.panel-body
+										.tile: table.table.table-bordered.table-hover
+												each skillset in profile.skillset.sort('name') 
+													if tag.id == skillset.tag 
+														tr
+															td(style='width: '+(100/4)+'%') 										
+																p= skillset.name
+															td 
+																//- var text=''
+																each skill in profile.skills   												
+																	if (skill.skillset == skillset.id) 
+																		button(type='button', class="btn btn-default", data-trigger="focus", data-toggle="popover", data-placement="top", title="Test title", data-content="And here's some amazing content.", data-original-title="#{skill.name}")= skill.name																	
+																		//button.btn.btn-default(data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?")= skill.name																	
+																		//span.label.label-default=skill.name
+																		// - text=skill.name+", "+text  
+																		//p= text
+													//else 
+														.alert.alert-danger Add some perks and abilities into #{tag.tag} .. 
+														-return false 											
+					else 
+						.panel.panel-default
+							.panel-heading
+								.panel-title
+									p= tag.tag
+							.panel-body
+									each skillset in profile.skillset.sort('name')
+										.col-md-6
+											.panel.panel-primary
+												.panel-heading
+													.row
+														.col-md-11
+															p= skillset.name
+														.col
+															span.badge=profile.skills.length
+												- var text=''
+												for skill in profile.skills   												
+													if (skill.skillset == skillset.id) 
+														- text=skill.name+" "+text  
+												.panel-body
+													p= text
+				if profile.references.length && profile.jobs.length 
+					.list-group
+						ul.list-group(style='width:100%')
+							li.list-group-item 
+								h3 Work experience
+							each job in profile.jobs.sort('-joined')
+								each ref in profile.references
+									if ref.id == job.company 
+										li.list-group-item
+											.panel.panel-default(style='width:90%')
+												.panel-heading
+													.row
+														.col-md-10
+															h4=job.title														
+														.col-md-2
+															h4.span.badge=job.years+' year(s)'
+												.panel-body
+													.panel.panel-default(style='width:90%')
+														.panel-body
+															//li: a(href=ref.compurl)=ref.company 
+																	|  located in #{ref._.address.format('suburb state')}
+															//p= 'In '+job._.joined.format('MMM YYYY')+' - '+job._.left.format('MMM YYYY')
+																// li= ref.company+' located in '+ref._.address.format('suburb state')
+															p= 'During '+job._.joined.format('MMM YYYY')+' - '+job._.left.format('MMM YYYY')
+															if job.description
+																p!= job.description.html
+													hr
+													.panel.panel-default(style='width:90%')
+														.panel-heading
+															.panel-title
+																.row
+																	.col-md-11
+																		h5 Responsibilities and Achievements:
+																	.col-md-1
+																		h5.span.badge=job.responsibilities.length
+														.panel-body
+															ul.list-group(style='width:100%')
+																each resp in job.responsibilities																									
+																	li.list-group-item= resp
+																		//li.list-group-item.disabled Responsibilities:
+				if profile.education.length
+					.list-group
+						ul.list-group(style='width:100%')
+							li.list-group-item 
+								h3 Education 
+							each edu in profile.education.sort('graduated')							
+								li.list-group-item
+									.panel.panel-default(style='width:90%')
+										.panel-heading
+											.panel-title
+												if edu.degree 													
+													h4= edu.degree +' in '+edu.title
+												else
+													h4=	edu.title
+										.panel-body
+											p= edu.institute
+											p= 'Completed (graduated) : '+edu._.graduated.format('MMM YYYY') 									
+											if edu.description 
+												p= edu.description
+												//p= edu.embed.description
+											hr
+					.list-group
+						.list-group-item(style='width:100%')
+							h3.list-group-item-heading References 
+							br
+							pre.list-group-item-text(style='width:90%') available upon request
+
+			.container: .row 
+				.col-sm-3
+					.xs-right: a(href='/profiles').text-muted &larr; Back to Profiles
+				.col-md-5
+					p.blog-post__byline Posted
+						if profile.who
+							|  by&nbsp;
+							a(href='/members', rel='author')=profile.who.name.full
+						if profile.publishedDate
+							|  on #{profile._.publishedDate.format('MMMM D, YYYY')}
+						if profile.tags && profile.tags.length
+							|  in&nbsp;
+							each cat, cat_i in profile.tags
+								a(href='/profiles/' + cat.key)= cat.tag
+								if cat_i < profile.skillset.length - 1
+									| ,&nbsp;
+								else
+									|&nbsp;
+					
+						//- sharing buttons
+				.col-sm-4
+					span.share-buttons
+						span.share-button
+							.fb-like(data-href="https://www.s-vp.com.com/profiles/profile/" + profile.key, data-colorscheme="light", data-layout="button_count", data-action="like", data-show-faces="false", data-send="false")
+						span.share-button
+							a(href="https://twitter.com/share", data-via="SVP Consulting", data-hashtags="svpconsulting", data-count="button", data-dnt="true").twitter-share-button Tweet
+						span.share-button
+							.g-plusone(data-size="medium")
+
+
+
+block js
+	script(src='/js/common/share.js')
+	script(src="https://apis.google.com/js/plusone.js")

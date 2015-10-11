@@ -1,0 +1,38 @@
+extends ../../layouts/default
+
+include ../../mixins/skill
+
+block intro
+	.page-intro: .container
+		h1.page-title=data.category ? data.category.name : 'Skills Dictionary'		
+		p.lead
+			| Skills Dictionary &nbsp;
+			if !user
+				a(href='/join').js-auth-trigger Sign in, 
+				| &nbsp;and write something .. 
+			else 
+				a(href='/me/create/skill') add a new skill ..  
+block content
+	.page-content: .container
+		.row
+			div(class= data.tags.length || !data.skills.length ? 'col-md-10' : 'col-md-10 col-md-offset-1')
+				if filters.tag && !data.tag
+					h3 Invalid Category.
+				else
+					if data.skills.length
+						.post-cards.row(itemscope itemtype="http://schema.org/Blog")
+							each skill in data.skills
+								+skill(skill)
+					else
+						if data.tag
+							h3.text-muted No skills in category #{data.tag.tag}.
+						else
+							h3.text-muted Be first to post ... 			
+			if data.tags.length
+				.col-md-2
+					if data.tags.length
+						h5.text-muted Filter by tag
+						ul.list-unstyled.tags-list
+							li: a(href='/skills', class=!data.tags ? 'active' : false) All
+							each tag in data.tags
+								li: a(href='/skills/' + tag.key, class=data.tag && data.skills.id == tag.id ? 'active' : false).list-group-item= tag.tag

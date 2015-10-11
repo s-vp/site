@@ -1,0 +1,24 @@
+mixin skill(skill)
+	article(role="article", itemscope itemtype="http://schema.org/BlogPosting").links-list
+		.row
+			.col-xs-1
+				h3
+					span.entypo.entypo-skill.text-muted
+			.col-xs-11
+				h4(itemprop='name').mt-5
+					a(href='/skills/' + skill.key, itemprop='url').text-dark
+						strong= skill.name
+				if skill.author
+					p.byline: small.text-muted #{skill.author.name.full} &middot; added #{moment(skill.publishedDate).fromNow()}
+					//p.byline: small.text-muted #{skill.author} &middot; added #{moment(skill.publishedDate).fromNow()}
+				p.skill: a(href=skill.href, target='_blank'): em!=skill.href
+				if filters.tag
+					ul.list-unstyled.tags-list
+						li: a(href='/skills/' + tag.key, class=data.tag).list-group-item= filters.tag.tag
+				if skill.skillset
+					ul.list-unstyled.tags-list
+						//-each skillset, i in skill.skillsets
+						li: a(href='/skills/' + skill.skillset.key)= skill.skillset.name
+				.description
+					!= skill.brief
+		
