@@ -1,7 +1,7 @@
-s-vp.com
-=========
+http://www.s-vp.com
+====================
 
-## S-VP Consulting Website.
+## SVP Consulting Website.
 
 ### Coding Guidelines
 
