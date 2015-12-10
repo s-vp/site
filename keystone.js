@@ -49,7 +49,10 @@ keystone.init({
 	
 	'chartbeat property': process.env.CHARTBEAT_PROPERTY,
 	'chartbeat domain': process.env.CHARTBEAT_DOMAIN,
-
+	'wysiwyg override toolbar': false,
+	'wysiwyg menubar': true,
+	'wysiwyg additional buttons': 'preview, spellchecker',  
+	'wysiwyg additional plugins': 'paste, image, table, preview, textpattern, spellchecker',
 	'basedir': __dirname
 	
 });

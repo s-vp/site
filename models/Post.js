@@ -19,6 +19,7 @@ Post.add({
 	author: { type: Types.Relationship, ref: 'User', index: true },
 	publishedDate: { type: Types.Date, index: true },
 	image: { type: Types.CloudinaryImage },
+	content_markdown: { label: 'Content in Markdown format', type: Types.Markdown, index: true, height: 700, collapse: true },
 	content: {
 		brief: { type: Types.Html, wysiwyg: true, height: 150 },
 		extended: { type: Types.Html, wysiwyg: true, height: 400 }
@@ -67,7 +68,7 @@ Post.schema.methods.notifyAdmins = function(callback) {
 				keystoneURL: 'http://www.s-vp.com/keystone/post/' + post.id,
 				subject: 'New Post to www.s-vp.com'
 			}, {
-				to: admin,
+				to: 'webmaster@s-vp.com',
 				from: {
 					name: 'SVP Consulting',
 					email: 'contact@s-vp.com'
@@ -91,6 +92,12 @@ Post.schema.methods.notifyAdmins = function(callback) {
 	
 }
 
+Post.schema.pre('save', function(next) {
+    if (this.content_markdown && !this.content.extended) {
+       this.content.extended = this.content_markdown.html
+    }
+    next();
+});
 
 /**
  * Registration
