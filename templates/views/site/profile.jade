@@ -21,7 +21,7 @@ block content
 	article.full-post
 		.container
 			.panel: .panel-body
-				if profile.who && profile.isAvailable
+				if  profile.who && profile.isAvailable
 					each member in [profile.who]
 						- var twitterUsername = member.twitterUsername || (member.twitter ? member.twitter.replace('@', ''): '');
 						- var githubUsername = member.githubUsername || (member.github ? member.github.replace('@', '') : '');

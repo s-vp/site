@@ -66,7 +66,7 @@ Profile.defaultColumns = 'title, updatedBy|20%, updatedAt|20%';
  */
 
 
-Profile.relationship({ path: 'user', ref: 'User', refPath: 'profile'});
+//Profile.relationship({ path: 'user', ref: 'User', refPath: 'profile'});
 
 Profile.register();
 

@@ -41,7 +41,9 @@ exports = module.exports = function(req, res) {
 				locals.data.skillsets = skillsets;
 				next();
 				});				
+	});
 	
+
 	view.on('init', function(next) {
 		Profile.model.findOne()
 			.where('state', 'published')
@@ -53,12 +55,9 @@ exports = module.exports = function(req, res) {
 				locals.profile = profile;
 				next();
 			});
-
 	});
 	
 
-
-	});
 
 	view.on('init', function(next) {
 		Skill.model.find()
