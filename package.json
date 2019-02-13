@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/s-vp/site.git"
   },
-"dependencies": {
+  "dependencies": {
     "async": "^1.5.0",
     "babel-core": "^6.3.17",
     "babel-plugin-syntax-object-rest-spread": "^6.3.13",
@@ -25,6 +25,7 @@
     "express-graphql": "^0.4.5",
     "graphql": "^0.4.14",
     "graphql-relay": "^0.3.5",
+    "jade": "1.11.0",
     "keystone": "https://github.com/keystonejs/keystone.git",
     "keystone-utils": "^0.1.13",
     "lodash": "^3.10.1",
