@@ -21,7 +21,7 @@ h5, .h5 { font-size: 1.2em; }
 h6, .h6 { font-size: .85em; }
 
 h1,.h1,h2,.h2,h3,.h3 { color: @gray-darker; letter-spacing: -0.5px; }
- 
+
 @media (max-width: @screen-md-max) {
 	h1, .h1 { font-size: 2.8em; }
 	h2, .h2 { font-size: 1.8em; }
@@ -30,8 +30,7 @@ h1,.h1,h2,.h2,h3,.h3 { color: @gray-darker; letter-spacing: -0.5px; }
 	h5, .h5 { font-size: 1.2em; }
 	h6, .h6 { font-size: .85em; }
 }
-	
- 
+
 @media (max-width: @screen-sm-max) {
 	body { font-size: 95%; }
 	h1, .h1 { font-size: 2.4em; }
@@ -149,7 +148,7 @@ cite    { font-style: normal; }
 // Contextual colors
 .text-muted {
 	color: @text-muted;
-	
+
 	a& {
 		color: @text-muted;
 	}
@@ -176,7 +175,7 @@ cite    { font-style: normal; }
 	&a,
 	&.btn-link {
 		color: @gray-light;
-		
+
 		&:hover,
 		&:focus {
 			color: @brand-danger;
@@ -228,11 +227,11 @@ ol {
 // Minidot is a less intrusive bullet style list
 .list-minidot {
 	.list-unstyled();
-	
+
 	li {
 		padding-left: 1.5em;
 		position: relative;
-		
+
 		&:before {
 			content: "\00b7";
 			color: @gray-light;
@@ -387,4 +386,15 @@ address {
 	margin-bottom: @line-height-computed;
 	font-style: normal;
 	line-height: @line-height-base;
+}
+
+// External links
+[rel='external'] + i {
+	&:after {
+		content: "\27A1";
+		font-family: "EntypoRegular";
+		font-size: 1rem;
+    	font-style: normal;
+		padding-left: .25rem;
+	}
 }

@@ -1,6 +1,13 @@
 var keystone = require('keystone'),
 	Types = keystone.Field.Types;
 
+var myStorage = new keystone.Storage({
+  adapter: keystone.Storage.Adapters.FS,
+  fs: {
+  	path: keystone.expandPath('./uploads'),
+  	publicPath: '/public/uploads',
+  },
+});
 var Profile = new keystone.List('Profile', {
 	map: { name: 'title' }, 
 	label: 'Profiles',
@@ -20,7 +27,7 @@ Profile.add(
 	summary: { type: Types.Markdown, index: true },
 	logourl: { type: Types.Url, label: 'Image url to be used as a logo for your profile' },  
 	image: { type: Types.CloudinaryImage },
-	file: { type: Types.LocalFile, dest: '/home/nodejs/node/s-vp/public/files', prefix: '/files' }
+	file: { type: Types.File, storage: myStorage, path: '/home/nodejs/node/s-vp/public/files', publicPath: '/files' }
 },
 	'Profile Attributes', {
 	state: { type: Types.Select, options: 'draft, published, archived', default: 'draft' },
